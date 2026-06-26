@@ -193,6 +193,9 @@ body.idle-active .ambient-orb { opacity: 0.12; }
   height: 100%;
   filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.08));
   transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animated-svg.floating {
@@ -266,11 +269,16 @@ body.idle-active .ambient-orb { opacity: 0.12; }
   }
 }
 
-/* SVG Path Animation Tweaks (Crisp Vector Outline) */
+/* SVG Path Animation Tweaks (Crisp Vector Outline & GPU Acceleration) */
 svg path:not(defs path) {
   fill-opacity: 0;
   stroke-opacity: 1;
   filter: drop-shadow(0 0 0px transparent);
+  
+  /* Force GPU layer promotion */
+  will-change: stroke-dashoffset, fill-opacity, stroke-opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 /* Class to temporarily disable transitions for instant resets */
@@ -292,6 +300,10 @@ svg path:not(defs path) {
   pointer-events: none;
   z-index: 10;
   width: max-content;
+  
+  /* Force GPU layer promotion */
+  will-change: opacity, transform, filter;
+  backface-visibility: hidden;
 }
 
 .welcome-text-container.active {
