@@ -1,0 +1,320 @@
+/* Design System & Global Variables */
+:root {
+  --bg-color-1: #050608;
+  --bg-color-2: #0c0e14;
+  --accent-color: #e73652;
+  --accent-gradient: linear-gradient(135deg, #e73652 0%, #f18440 100%);
+  --glow-color: rgba(231, 54, 82, 0.2);
+  --font-sans: 'Outfit', -apple-system, sans-serif;
+  --text-secondary: #52525b; /* Slate gray */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--bg-color-1);
+  background-image: radial-gradient(circle at 50% 50%, var(--bg-color-2) 0%, var(--bg-color-1) 100%);
+  color: #18181b;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Ambient Background Orbs (Outside the phone) */
+.ambient-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-orb {
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  max-width: 600px;
+  max-height: 600px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.05;
+  transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease-out;
+}
+
+.orb-1 {
+  background: var(--accent-gradient);
+  top: -10%;
+  left: -10%;
+  animation: floatOrb1 25s infinite alternate ease-in-out;
+}
+
+.orb-2 {
+  background: var(--accent-gradient);
+  bottom: -15%;
+  right: -10%;
+  animation: floatOrb2 30s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes floatOrb1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(5%, 10%) scale(1.05); }
+  100% { transform: translate(-3%, 3%) scale(0.95); }
+}
+
+@keyframes floatOrb2 {
+  0% { transform: translate(0, 0) scale(0.95); }
+  50% { transform: translate(-10%, -5%) scale(1.05); }
+  100% { transform: translate(3%, 3%) scale(1.0); }
+}
+
+/* Interactive Ambient Light levels (Outside phone) */
+body.drawing-active .ambient-orb { opacity: 0.08; }
+body.completion-pulse .ambient-orb { opacity: 0.2; }
+body.idle-active .ambient-orb { opacity: 0.12; }
+
+/* Phone Mockup Frame */
+.phone-mockup {
+  position: relative;
+  z-index: 10;
+  width: 320px;
+  height: 640px;
+  background: #18181b; /* Phone metal gray chassis */
+  border-radius: 42px;
+  padding: 10px; /* Frame border thickness */
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85),
+              0 0 20px rgba(255, 255, 255, 0.02) inset,
+              0 0 0 1px rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+/* Phone physical side button details */
+.phone-mockup::before {
+  content: '';
+  position: absolute;
+  top: 100px;
+  left: -3px;
+  width: 3px;
+  height: 35px;
+  background: #27272a;
+  border-radius: 3px 0 0 3px;
+  box-shadow: 0 45px 0 #27272a; /* Volume Up & Down keys */
+}
+
+.phone-mockup::after {
+  content: '';
+  position: absolute;
+  top: 120px;
+  right: -3px;
+  width: 3px;
+  height: 55px;
+  background: #27272a;
+  border-radius: 0 3px 3px 0; /* Power/Lock key */
+}
+
+/* Phone Screen (White Canvas) */
+.phone-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ffffff; /* PURE WHITE BACKGROUND */
+  border-radius: 34px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1) inset;
+}
+
+/* Dynamic Island Notch capsule */
+.phone-notch {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 18px;
+  background: #18181b;
+  border-radius: 9px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+}
+
+/* Camera lens shine detail */
+.phone-notch::before {
+  content: '';
+  width: 4.5px;
+  height: 4.5px;
+  background: #27272a;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+/* Centered Logo Wrapper inside phone screen */
+.logo-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 80%;
+  max-width: 230px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-display-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animated-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.08));
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animated-svg.floating {
+  animation: floatLogo 6s infinite ease-in-out,
+             breathingGlow 4s infinite ease-in-out;
+}
+
+@keyframes floatLogo {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(0.5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes breathingGlow {
+  0%, 100% { filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.08)) drop-shadow(0 0 0px transparent); }
+  50% { filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.08)) drop-shadow(0 0 6px var(--glow-color)); }
+}
+
+/* Ambient Radial Glow on white screen behind logo */
+.logo-flare {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(20px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.4);
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  transition: opacity 1.5s ease, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.logo-flare.active {
+  opacity: 0.22; /* Light bleed onto white canvas */
+  transform: translate(-50%, -50%) scale(3.5);
+}
+
+/* Center shockwave ring (Premium Glowing Sci-Fi Ring) */
+.shockwave-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--accent-color);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.shockwave-ripple.animate {
+  animation: shockwaveEffect 1.3s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
+}
+
+@keyframes shockwaveEffect {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.9;
+    box-shadow: 0 0 8px var(--accent-color), inset 0 0 6px var(--accent-color);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(15);
+    opacity: 0;
+    box-shadow: 0 0 20px var(--accent-color), inset 0 0 10px var(--accent-color);
+    filter: blur(2px);
+  }
+}
+
+/* SVG Path Animation Tweaks (Crisp Vector Outline) */
+svg path:not(defs path) {
+  fill-opacity: 0;
+  stroke-opacity: 1;
+  filter: drop-shadow(0 0 0px transparent);
+}
+
+/* Class to temporarily disable transitions for instant resets */
+.no-transition, .no-transition path:not(defs path) {
+  transition: none !important;
+}
+
+/* Minimalist Brand Welcome Text Container (Handles animations to prevent WebKit clipping bugs) */
+.welcome-text-container {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%) translateY(15px);
+  opacity: 0;
+  filter: blur(5px);
+  transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 10;
+  width: max-content;
+}
+
+.welcome-text-container.active {
+  opacity: 0.95;
+  transform: translateX(-50%) translateY(0);
+  filter: blur(0);
+}
+
+.welcome-text {
+  font-family: 'Comfortaa', 'Outfit', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  margin: 0;
+  padding: 0;
+  
+  /* Brand Gradient Text Fill matching the user's image */
+  background: linear-gradient(135deg, #e73652 0%, #f18440 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  
+  display: block;
+}
